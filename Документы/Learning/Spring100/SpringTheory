@@ -420,3 +420,111 @@ public class ComplexBusinessService {
 
                 }
             }
+
+
+    CDI - CONTEXT AND DEPENDENCY INJECTION:
+
+        - Java EE Dependency Injection Standart (JSR-330) - ia an Interface defining how to do DI.
+        - Spring supports CDI
+
+        - @Inject (@Autowired).
+        - @Named (@Component and @Qualifier)
+        - @Singleton (Desines a scope of Singleton)
+        
+        Maven Dependency for CDI:
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+
+
+    REMOVING SPRING BOOT IN APPLICATION:
+
+        - removing spring boot starter dependency on spring-core and spring-context
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+            </dependency>       
+            
+            -   <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core/artifactId>
+                </dependency>
+        
+        - Add @Configuration, add ApllicationContext:
+            AnnotationConfigApplicationContext = ACAC + TAB
+
+
+            ApplicationContext applicationContext =
+				new AnnotationConfigApplicationContext(Spring100BasicApplication.class);
+
+        - Add ComponentScan:
+
+            @ComponentScan("com.outspace.spring.spring100")
+
+        - Add dependency for SLF4j:
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+		    </dependency>
+
+        - If @PostConstruct and @PreDestroy not working, add javax.annotation-api as dependency:
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+
+
+        ADD LOGBACK AND CLOSE APPLICATION CONTEXT:
+
+
+            ConfigurableApplicationContext applicationContext =
+				new AnnotationConfigApplicationContext(Spring100BasicApplication.class);
+
+            applicationContext.close();
+
+
+            another way - try-catch with resources:
+
+            @Configuration
+            @ComponentScan("com.outspace.spring.spring100")
+            public class Spring100BasicApplication {
+
+                public static void main(String[] args) {
+
+                    try (ConfigurableApplicationContext applicationContext =
+                            new AnnotationConfigApplicationContext(Spring100BasicApplication.class)) {
+
+                        BinarySearchImpl binarySearch = applicationContext.getBean(BinarySearchImpl.class);
+                        BinarySearchImpl binarySearch1 = applicationContext.getBean(BinarySearchImpl.class);
+
+                        System.out.println(binarySearch);
+                        System.out.println(binarySearch1);
+
+                        int result = binarySearch.binarySearch(new int[]{12, 4, 6,}, 3);
+
+                        System.out.println(result);
+                    }
+                }
+            }
+
+
+        - problem with log4j resolved with dependency:
+
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </dependency>
+
+
+            
+
+
+
+
