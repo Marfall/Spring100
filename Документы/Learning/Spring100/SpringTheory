@@ -1,0 +1,422 @@
+https://github.com/in28minutes/spring-master-class
+
+Spring is a Dependency Injection Framework
+
+TYPICAL CODE:
+
+public class ComplexBusinessService {
+
+    SortAlgorithm sortAlgorithm = new BubbleSortAlgorithm();
+
+    // if we want to use another sortAlgorithm, we must modify the code    
+    // tight coupling
+}
+
+public class BubbleSortAlgorithm implements SortAlgorithm  {
+
+}
+
+REMOVE TIGHT COUPLING:
+
+public class ComplexBusinessService {
+
+    SortAlgorithm sortAlgorithm;
+
+   public ComplexBusinessService(SortAlgorithm sortAlgorithm) {
+       this.sortAlgorithm = sortAlgorithm;
+   }
+}
+
+=> We can write this code:
+
+    //loosely coupled programming 
+
+    SortAlgorithm sortAlgorithm = new SortAlgorithm();
+    ComplexBusinessService businessService = 
+        new ComplexBusinessService(sortAlgorithm);
+        
+        
+    Spring Framework instantiating  objects and  populate dependencies
+
+    So, your job as a programmer  to tell the Spring  Framework what are the objects it would need 
+    to manage and what are the dependencies of each class.
+
+
+    @Component
+    public class ComplexBusinessService {
+
+        @Autowired
+        SortAlgorithm sortAlgorithm;
+    }
+
+    @Component
+    public class BubbleSortAlgorithm implements SortAlgorithm{
+
+    }
+
+    @Component  - tells Spring to start managing it's class instances
+
+    @Autowired  - Spring starts looking for this dependency to fing a matching thing 
+
+    - Spring would make sure that the instances of all the objects it manages
+      are created with the dependencies properly populated.
+
+      TERMINOLOGY:
+
+            1) BEANS  -  objects, managing by Spring Framework
+
+            2) AUTOWIRING  - the process where Spring identifies the dependencies,
+                            identifies the matches for the dependencies and populates them;
+
+            3) DEPENDENCY INJECTION   - injecting one component to another as a dependency
+
+            4) INVERSION OF CONTROL   - Spring creates an instances 
+
+            5) IOC CONTAINER  -   is a generic terminology to represent anything that is 
+                                  implementing inversion of CONTROL
+
+            6) APPLICATION CONTEXT  - IoC Container in Spring Framework
+
+
+    USING INTERFACES FOR LOOSELY COUPLING:
+
+        public interface SortAlgorithm {
+            int[] sort(int[] numbers);
+        }
+
+        public class BubbleSortAlgorithm implements SortAlgorithm {
+            public int[] sort(int[] numbers) {
+                //Logic for Bubble Sort
+                return numbers;
+            }
+        }
+
+        public class BinarySearchImpl {
+
+            private  SortAlgorithm sortAlgorithm;
+
+            public BinarySearchImpl(SortAlgorithm sortAlgorithm) {
+                this.sortAlgorithm = sortAlgorithm;
+            }
+
+            public int binarySearch(int[] numbers, int numberToSearchFor) {
+
+                int[] sortedNumbers = sortAlgorithm.sort(numbers);
+                System.out.println(sortAlgorithm);
+                //Search in array
+                return 3;
+            }
+        }
+
+        @SpringBootApplication
+        public class Spring100Application {
+
+            public static void main(String[] args) {
+
+                BinarySearchImpl binarySearch = new BinarySearchImpl(new BubbleSortAlgorithm());
+                int result = binarySearch.binarySearch(new int[] {12, 4, 6, }, 3);
+                System.out.println(result);
+                
+                SpringApplication.run(Spring100Application.class, args);
+            }
+        }
+
+        =>  SortAlgorithm -  is a dependency of BinarySearch.
+            BinarySearch depends of the SortAlgorithm.
+            We male a SortAlgorithm as a separate dependency and passing it 
+            into the BinarySearch.
+            Then we create an instance of binarySearchImpl and create an instance of quickSort
+            and pass it in.
+
+
+    The most important concepts behind Spring are:
+        - Dependency Injection
+        - Loose Coupling
+
+    3 questions for begin in Spring Framework:
+
+        - What are te beans?
+        - What are the dependencies for the beans
+        - Where to search for beans
+
+    @SpringBootApplication - Spring Boot would automatically scan the package (and subpackages) for the beans, where the main
+                             application class us present.
+
+
+    SpringApplication.run(Spring100Application.class, args);
+
+        - run Spring Boot Application, returns ApplicationContext
+
+        => we can make a local variable from it:
+
+    ApplicationContext applicationContext = SpringApplication.run(Spring100Application.class, args);
+
+    BinarySearchImpl binarySearch = applicationContext.getBean(BinarySearchImpl.class);
+
+        - get bean from ApplicationContext
+
+
+    logging.level.org.springframework = debug
+        -set logging level in application.properties
+
+
+    Also, Spring is searching for beans and their dependencies with  Component Scan.
+
+
+    DYNAMIC AUTOWIRING AND TROUBLESHOOTING. @PRIMARY:
+
+    - Whenever you have any problems of the type 
+        "a bean is not found" or
+        "multiple beans are found"
+
+    => See if you have used the right combination of component, autowired and primary. 
+
+
+
+    CONSTRUCTOR AND SETTER INJECTION:
+
+        Mandatory Dependency:
+            - it is a dependency which it can't work without
+            - another - optional dependencies
+
+        If we have mandatory dependencies - the recommendation is
+        to use Constructor Injection
+
+        For optional dependencies, recommendation is Setter Injection
+
+
+    SPRING PROJECTS:
+
+        - Spring Batch
+        - Spring Boot
+        - Spring Cloud
+        - Spring Data
+        - Spring Integration
+        - Spring Security
+        - Spring HATEOAS
+
+    SPRING ADVATAGES:
+
+        - Enables Testable Code
+        - No Plumbuing Code
+        - Flexible Archicture
+        - Staying Current
+
+
+    DEPENDENCIES EXAMPLES:
+
+        @Component
+        public class ToDoController {
+
+            @Autowired
+            ToDoBusinessService businessService;
+        }
+
+        @Component
+        public class ToDoBusinessService {
+
+            @Autowired
+            ToDoDataService dataservice;
+        }
+
+        @Component
+        public class ToDoDataService {
+
+            @Autowired
+            JdbcTemplate template;
+        }
+
+
+    AUTOWIRING BY NAME AND PRIMARY:
+
+        @Autowired
+        private  SortAlgorithm sortAlgorithm;
+
+        =>
+
+        @Autowired
+        private  SortAlgorithm bubleSortAlgorithm;   - variable is a name of class 
+
+
+    QUALIFIER:
+
+        @Component
+        public class BinarySearchImpl {
+
+            @Autowired
+            @Qualifier("quick")
+            private  SortAlgorithm sortAlgorithm;
+
+
+            public int binarySearch(int[] numbers, int numberToSearchFor) {
+
+                int[] sortedNumbers = sortAlgorithm.sort(numbers);
+                System.out.println(sortAlgorithm);
+        
+                return 3;
+            }
+        }
+
+
+        @Component
+        @Qualifier("quick")
+        public class QuickSortAlgorithm implements SortAlgorithm {
+            public  int[] sort(int[] numbers) {
+                
+                return numbers;
+            }
+        }
+
+        => 3 options to resolving multiple candidates for autowiring:
+
+            - Name 
+            - @Qualifier
+            - @Primary        //recommended way
+ 
+
+    BEAN SCOPE:
+
+        - Singleton - One instance per Spring Context 
+        - Prototype - New bean whenever requested
+        - Request - One bean per HTTP request
+        - Session - One bean per HTTP session
+
+         Default - Singleton
+
+            @Component
+            @Scope("prototype")
+            public class BinarySearchImpl {
+            }
+
+            Hardcoding "prototype" is not good practice,
+            Use ConfigurableBeanFactory:
+
+            @Component
+            @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+            public class BinarySearchImpl {
+            }
+
+
+    SLFJ LOGGER:
+
+        private  static Logger LOGGER = LoggerFactory.getLogger(Spring100ScopeApplication.class);
+
+
+        @SpringBootApplication
+        public class Spring100ScopeApplication {
+
+            private  static Logger LOGGER = LoggerFactory.getLogger(Spring100ScopeApplication.class);
+
+            public static void main(String[] args) {
+
+                ApplicationContext applicationContext =
+                        SpringApplication.run(Spring100ScopeApplication.class, args);
+
+                PersonDAO personDao = applicationContext.getBean(PersonDAO.class);
+
+                PersonDAO personDao2 = applicationContext.getBean(PersonDAO.class);
+
+                LOGGER.info("{}",personDao);
+                LOGGER.info("{}",personDao.getJdbcConnection());
+
+                LOGGER.info("{}",personDao2);
+                LOGGER.info("{}",personDao2.getJdbcConnection());
+            }
+        }
+
+        CBF + TAB = ConfigurableBeanFactory
+
+
+        @Component
+        public class PersonDAO {
+
+            @Autowired
+            JdbcConnection jdbcConnection;
+
+            public JdbcConnection getJdbcConnection() {
+                return jdbcConnection;
+            }
+
+            public void setJdbcConnection(JdbcConnection jdbcConnection) {
+                this.jdbcConnection = jdbcConnection;
+            }
+        }
+
+
+        @Component
+        @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
+        public class JdbcConnection {
+
+            public JdbcConnection() {
+                System.out.println("JDBC Connection ");
+            }
+        }
+
+        proxyMode = ScopedProxyMode.TARGET_CLASS
+
+            - create a new object in every request  (proxy)
+
+            => every time , when JdbcConnection is used, it would start using a proxy
+               and whenever there is a request, you make sure that there is a new JdbcConnection beeing used.
+
+
+        => When you trying to get a singleton - bean and one of it's dependencies is a prototype,
+           then on the dependency, we should use a proxy.
+
+
+
+    DIFFERENCE BETWEEN SPRING SINGLETON AND  GOF SINGLETON:
+
+        - GOF Singleton means - One Singleton per JVM;
+        - Spring Singleton -  One instance per Application Context
+
+
+    USING COMPONENT SCAN:
+
+        @SpringBootApplication includes:
+
+            - @ComponentScan
+            - @Configuration
+            - @EnabeAutoConfiguration  
+
+
+        - @ComponentScan("com.in28minutes,spring.basics")  - scan for components in package
+
+
+
+    LIFECYCLE OF A BEAN - @PostConstruct and  @PreDestroy:
+
+        - @PostConstruct would be called when the bean is created.
+          So, as soon as the bean is created and initialized with the dependencies,
+          the postConstruct method would be called.
+
+        - @PreDestroy method called when the bean is removed out of context.
+         
+
+            @Component
+            @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+            public class BinarySearchImpl {
+
+                private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+                @Autowired
+                @Qualifier("quick")
+                private  SortAlgorithm sortAlgorithm;
+                
+                public int binarySearch(int[] numbers, int numberToSearchFor) {
+
+                    int[] sortedNumbers = sortAlgorithm.sort(numbers);
+                    System.out.println(sortAlgorithm);
+                    return 3;
+                }
+
+                @PostConstruct
+                public void postConstruct() {
+                    logger.info("postConstruct");
+                }
+                @PreDestroy
+                public void preDestroy() {
+                    logger.info("preDestroy");
+
+                }
+            }
