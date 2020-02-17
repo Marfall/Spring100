@@ -523,8 +523,158 @@ public class ComplexBusinessService {
                 </dependency>
 
 
+
+        DEFINING SPRING APPLICATION CONTEXT USING XML:
+
+            -we  need to create applicationContext.xml in src/main/resources
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <beans xmlns="http://www.springframework.org/schema/beans"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+                
+                <bean id="xmlJdbcConnection"
+                    class="com.outspace.spring.spring100.xml.XMLJdbcConnection">
+                </bean>
+                <bean id="xmlPersonDAO"
+                    class="com.outspace.spring.spring100.xml.XMLPersonDAO">
+                    <property name="xmlJdbcConnection" ref="xmlJdbcConnection"/>
+                </bean>
+            </beans>
+
+            public class XMLPersonDAO {
+                
+                XMLJdbcConnection xmlJdbcConnection;
+
+                public XMLJdbcConnection getXmlJdbcConnection() {
+                    return xmlJdbcConnection;
+                }
+
+                public void setXmlJdbcConnection(XMLJdbcConnection xmlJdbcConnection) {
+                    this.xmlJdbcConnection = xmlJdbcConnection;
+                }
+            }
+
+            public class XMLJdbcConnection {
+
+                public XMLJdbcConnection() {
+                    System.out.println("JDBC Connection ");
+                }
+            }
+
+
+        MIXING XML CONEXT AND JAVA CONFIG:
+
+            applicationContext.getBeanDefinitionNames();
+
+                - What are the beans are loaded by this applicationContext
+
+
+            LOGGER.info("Beans Loaded -> {}",
+                        (Object)applicationContext.getBeanDefinitionNames());
+
+                -  get an array of defined beans (without Object-casting - only one)
+
             
+            CHANGE SCHEMA:
+
+                <?xml version="1.0" encoding="UTF-8"?>
+                <beans xmlns="http://www.springframework.org/schema/beans"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:context="http://www.springframework.org/schema/context"
+                    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+
+                    <context:component-scan base-package="com.outspace.spring.spring100"/>
+
+                    <bean id="xmlJdbcConnection"
+                        class="com.outspace.spring.spring100.xml.XMLJdbcConnection">
+                    </bean>
+                    <bean id="xmlPersonDAO"
+                        class="com.outspace.spring.spring100.xml.XMLPersonDAO">
+                        <property name="xmlJdbcConnection" ref="xmlJdbcConnection"/>
+                    </bean>
+                </beans>
+
+
+            IOC-CONTAINER, APPLICATION CONTEXT, BEAN FACTORY:
+
+                IoC container - is a generic concept
+
+                - There are 2 implementations of IoC in Spring:
+
+                    - BeanFactory           - basic management for beans and wiring the dependencies
+                    - ApplicationContext   // recommended
+
+                        - BeanFactory++
+                            - Spring's AOP  features
+                            - |18n capabilities
+                            - WebApplicationContext for web applications etc             
+                            - provides Internationalization - can customize the text, based on the
+                              locale of user
+
+
+            @COMPONENT VS @SERVICE VS @REPOSITORY VS @CONTROLLER:
+
+                @Component - Generic Component
+
+                @Repository - encapsulating storage, retrieval and search behaviour typically
+                            from a relational database.
+                            Provides a default JDBC-exeptions translation facility.
+
+                @Service - Business Service Facade
+                            - With Sprong AOP you can identify and log all of the content that coming in.
+                            
+
+                @Controller - Controller in MVC pattern
 
 
 
+        READ VALUES FROM  EXTERNAL PROPERTIES FILE:
+
+            1) create file app.properties in resources and add something like:
+
+                external.service.url=hhtp://someserver.dev.com/service
+            
+            2) add      @Value("${external.service.url}")
+                        private String url;
+
+                It's configuring when context is creating.
+                @PropertySource("classpath:app.properties")   - defining properties source
+
+
+                @Configuration
+                @ComponentScan("com.outspace.spring.spring100")
+                @PropertySource("classpath:app.properties")
+                public class Spring100PropertiesApplication {
+
+                    public static void main(String[] args) {
+
+                        try (ConfigurableApplicationContext applicationContext =
+                                new AnnotationConfigApplicationContext(Spring100PropertiesApplication.class)) {
+
+                            SomeExternalService someExternalService =
+                                    applicationContext.getBean(SomeExternalService.class);
+                            
+                            System.out.println("CURRENT URL: " + someExternalService.returnServiceURL());
+                        }
+                    }
+                }
+
+                @Service
+                public class SomeExternalService {
+
+                    // from property file external.service.url
+                    @Value("${external.service.url}")
+                    private String url;
+
+                    public String returnServiceURL() {
+                        return url;
+                    }
+                }
+
+
+                
 
