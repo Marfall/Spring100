@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3b488c16-8850-4e88-bb81-78ae4ad806db" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XyH0vaNt8vpCG3Pq02bzoVp6Un" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mockito-demo" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="junit" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.MyMathTest">
+    <configuration name="MyMathTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Junit5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="junit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="junit" />
+      <option name="MAIN_CLASS_NAME" value="junit.MyMathTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyMathTest.sum" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Junit5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="junit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="junit" />
+      <option name="MAIN_CLASS_NAME" value="junit.MyMathTest" />
+      <option name="METHOD_NAME" value="sum" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyMathTest.sum_with1number" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Junit5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="junit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="junit" />
+      <option name="MAIN_CLASS_NAME" value="junit.MyMathTest" />
+      <option name="METHOD_NAME" value="sum_with1number" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyMathTest.sum_with3numbers" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Junit5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="junit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="junit" />
+      <option name="MAIN_CLASS_NAME" value="junit.MyMathTest" />
+      <option name="METHOD_NAME" value="sum_with3numbers" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyMathTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Junit5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="junit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="junit" />
+      <option name="MAIN_CLASS_NAME" value="junit.MyMathTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.MyMathTest" />
+        <item itemvalue="JUnit.MyMathTest.sum_with1number" />
+        <item itemvalue="JUnit.MyMathTest.sum_with3numbers" />
+        <item itemvalue="JUnit.MyMathTest.test" />
+        <item itemvalue="JUnit.MyMathTest.sum" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b488c16-8850-4e88-bb81-78ae4ad806db" name="Default Changelist" comment="" />
+      <created>1582011194084</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582011194084</updated>
+      <workItem from="1582011198829" duration="5658000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="801" y="265" width="374" height="575" key="#com.intellij.ide.util.MemberChooser" timestamp="1582011726834">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="801" y="265" width="374" height="575" key="#com.intellij.ide.util.MemberChooser/67.27.1853.1053@67.27.1853.1053" timestamp="1582011726834" />
+    <state x="721" y="330" width="524" height="444" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1582011698536">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="721" y="330" width="524" height="444" key="#com.intellij.ide.util.PackageChooserDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1582011698536" />
+    <state x="776" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1582017438463">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="776" y="310" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1582017438463" />
+    <state width="1807" height="258" key="GridCell.Tab.0.bottom" timestamp="1582017441389">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1807" height="258" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1582017441389" />
+    <state width="1807" height="258" key="GridCell.Tab.0.center" timestamp="1582017441388">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1807" height="258" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1582017441388" />
+    <state width="1807" height="258" key="GridCell.Tab.0.left" timestamp="1582017441388">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1807" height="258" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1582017441388" />
+    <state width="1807" height="258" key="GridCell.Tab.0.right" timestamp="1582017441388">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state width="1807" height="258" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1582017441388" />
+    <state x="476" y="130" width="1024" height="845" key="SettingsEditor" timestamp="1582011495906">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="476" y="130" width="1024" height="845" key="SettingsEditor/67.27.1853.1053@67.27.1853.1053" timestamp="1582011495906" />
+    <state x="660" y="448" width="646" height="224" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1582015426956">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="660" y="448" width="646" height="224" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/67.27.1853.1053@67.27.1853.1053" timestamp="1582015426956" />
+    <state x="767" y="227" width="442" height="650" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1582011889077">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="767" y="227" width="442" height="650" key="com.intellij.testIntegration.createTest.CreateTestDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1582011889077" />
+    <state x="726" y="294" width="524" height="516" key="extract.method.dialog" timestamp="1582012572374">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="726" y="294" width="524" height="516" key="extract.method.dialog/67.27.1853.1053@67.27.1853.1053" timestamp="1582012572374" />
+  </component>
+</project>

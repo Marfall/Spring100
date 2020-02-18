@@ -678,3 +678,148 @@ public class ComplexBusinessService {
 
                 
 
+        JUNIT TESTING:
+
+            - It's testing a specific method or a specific class or group of methods;
+
+            @Test - method contains Unit Test
+
+            import org.junit.jupiter.api.Test;
+
+            import static org.junit.jupiter.api.Assertions.assertEquals;
+
+            class MyMathTest {
+
+                //MyMath.sum
+                // 1,2,3 => 6
+
+                @Test
+                public  void sum_with3numbers() {
+                    MyMath myMath = new MyMath();
+                    int result = myMath.sum(new int[] {1, 2, 3});
+
+                    //check that result is 6
+                    //check result==6
+                    
+                    assertEquals(6, result);
+
+                    System.out.println(result);
+                }
+            }
+
+
+                @Test
+                public void test() {
+                    boolean cond = true;
+                    assertEquals(true, cond);
+                    assertTrue(cond);
+                    assertFalse(cond);
+                    assertNotNull(Object object);
+                    assertArrayEquals(expecteds, actuals);
+                }
+            }
+             
+
+            @BeforeEach - will be running before every test
+
+            @BeforeAll - it's a class annotation, runs one time for every class (and static method)
+
+
+
+            import static org.junit.jupiter.api.Assertions.assertEquals;
+
+            class MyMathTest {
+
+                @BeforeEach
+                public void before() {
+                    System.out.println("Before test");
+                }
+                @AfterAll
+                public static void after() {
+                    System.out.println("After test");
+                }
+                @Test
+                public  void sum_with3numbers() {
+                    System.out.println("Test1");
+                    MyMath myMath = new MyMath();
+                    int result = myMath.sum(new int[] {1, 2, 3});
+                    assertEquals(6, result);
+                    System.out.println(result);
+                }
+                @Test
+                public void sum_with1number() {
+                    System.out.println("Test2");
+                    assertEquals(3,new MyMath().sum(new int[] {3}));
+                }
+            }
+
+
+        MOCKITO:
+
+        When we are using Mocks we don't really need to create multiple versions to make it 
+        really easy to dynamically create different classes and make them return the data
+        that we would want to return.
+
+            WITHOUT MOCK EXAMPLE:
+
+                public class SomeBusinessTest {
+
+                    @Test
+                    public void testFindTheGreatestFromAllData() {
+
+                        SomeBusinessImpl businessImpl = new SomeBusinessImpl(new DataServiceStub());
+                        int result = businessImpl.findTheGreatestFromAllData();
+                        assertEquals(24, result);
+                    }
+                }
+
+                class DataServiceStub implements DataService {
+                    @Override
+                    public int[] retrieveAllData() {
+                        return new int[] {4, 6, 15};
+                    }
+                }
+
+
+        USING MOKITO:
+
+            package com.mockito100.mockitodemo;
+
+            import org.junit.jupiter.api.Test;
+
+            import static org.junit.jupiter.api.Assertions.assertEquals;
+            import static org.mockito.Mockito.mock;
+            import static org.mockito.Mockito.when;
+
+            public class SomeBusinessMockTest {
+
+                @Test
+                public void testFindTheGreatestFromAllData() {
+
+                    DataService dataServiceMock = mock(DataService.class);
+
+                    when(dataServiceMock.retrieveAllData()).thenReturn(new int[] {24, 15, 3});
+
+                    SomeBusinessImpl businessImpl = new SomeBusinessImpl(dataServiceMock);
+                    int result = businessImpl.findTheGreatestFromAllData();
+                    assertEquals(24, result);
+                }
+
+                @Test
+                public void testFindTheGreatestFromAllData_ForOneValue() {
+
+                    DataService dataServiceMock = mock(DataService.class);
+
+                    when(dataServiceMock.retrieveAllData()).thenReturn(new int[] {15});
+
+                    SomeBusinessImpl businessImpl = new SomeBusinessImpl(dataServiceMock);
+                    int result = businessImpl.findTheGreatestFromAllData();
+                    assertEquals(24, result);
+                }
+            }
+
+
+
+
+
+    MOCKITO ANNOTATIONS @MOCK, @INJECTMOKS, @RUNWITH
