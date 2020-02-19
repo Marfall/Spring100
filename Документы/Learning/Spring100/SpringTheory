@@ -1238,3 +1238,153 @@ public class ComplexBusinessService {
         WEAVER     - the framework  which does the entire logic of making sure thet the Aspect
                      is invoded the right point.
 
+
+
+        USING @AFTER, @AfterReturning, @AfterThrowing advices:
+
+            @Configuration
+            @Aspect
+            public class AfterAopAspect {
+
+                private Logger logger = LoggerFactory.getLogger(this.getClass());
+                @AfterReturning(
+                        value = "execution(* com.spring100.spring.aop.springaop.business.*.*(..))",
+                        returning = "result"
+                )
+                public void after(JoinPoint joinPoint, Object result) {
+                    // Advice
+                    logger.info("Check for user access");
+                    logger.info("{} returned value {}", joinPoint,result);
+                }
+
+                @AfterThrowing(
+                        value = "execution(* com.spring100.spring.aop.springaop.business.*.*(..))",
+                        throwing = "exception"
+                )
+                public void afterThrowing(JoinPoint joinPoint, Exception exception) {
+                    // Advice
+                    logger.info("Check for user access");
+                    logger.info("{} throw exception {}", joinPoint, exception);
+                }
+
+                @After(
+                        value = "execution(* com.spring100.spring.aop.springaop.business.*.*(..))")
+                public void after(JoinPoint joinPoint) {
+                    // Advice
+                    logger.info("Check for user access");
+                    logger.info("after execution of {}", joinPoint);
+                }
+            }
+
+
+            @AfterReturning will be executed only when the execution gets completed successfully
+
+
+
+    USING @Around ADVICE ANNOTATION:
+
+        - ProceedingJoinPoint would allow you ti continue with the execution
+          of the method
+
+            @Configuration
+            @Aspect
+            public class MethodExecutionCalculationAspect {
+
+                private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+                @Around("execution(* com.spring100.spring.aop.springaop.business.*.*(..))")
+                public void around(ProceedingJoinPoint joinPoint) throws Throwable {
+                    long startTime = System.currentTimeMillis();
+                    joinPoint.proceed();
+                    long timeTaken = System.currentTimeMillis() - startTime;
+                    logger.info("Time taken by {} is {}", joinPoint, timeTaken);
+                }
+
+            }
+
+
+    BEST PRATICE - COMMON POINTCUT CONFIGURATION:
+
+        public class CommonJoinPointConfig {
+
+            @Pointcut("execution(* com.spring100.spring.aop.springaop.business.*.*(..))")
+            public void dataLayerExecution() {
+
+            }
+        }
+
+        @Configuration
+        @Aspect
+        public class UserAccessAspect {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+            @Before("com.spring100.spring.aop.springaop.aspect.CommonJoinPointConfig.dataLayerExecution()")
+            public void before(JoinPoint joinPoint) {
+                // Advice
+                logger.info("Check for user access");
+                logger.info("Allowed execution for- {}", joinPoint);
+            }
+        }
+
+        - That would help you in keeping all the pointciy at a single place
+
+        - COMBINE EXECUTIONS:
+
+              @Pointcut("com.spring100.spring.aop.springaop.aspect.CommonJoinPointConfig.businessLayerExecution()
+                         && com.spring100.spring.aop.springaop.aspect.CommonJoinPointConfig.dataLayerExecution()")                                    public  void allLayerExecution() {}
+
+
+
+            @Pointcut("bean(*dao*)")
+            public void beanStartingWithDao() {}
+
+            - so we are looking for containing dao this to look for any bean 
+              which has the name dao in between
+
+            public class CommonJoinPointConfig {
+
+                @Pointcut("execution(* com.spring100.spring.aop.springaop.dao.*.*(..))")
+                public void dataLayerExecution() {}
+
+                @Pointcut("execution(* com.spring100.spring.aop.springaop.business.*.*(..))")
+                public void businessLayerExecution() {}
+
+                @Pointcut("com.spring100.spring.aop.springaop.aspect.CommonJoinPointConfig.businessLayerExecution() && com.spring100.spring.aop.springaop.aspect.CommonJoinPointConfig.dataLayerExecution()")
+                public  void allLayerExecution() {}
+
+                @Pointcut("bean(*dao*)")
+                public void beanStartingWithDao() {}
+
+                @Pointcut("within(com.spring100.spring.aop.springaop.business..")
+                public void beanStartingWithDaoWithin() {}
+            }   
+
+
+    CREATING CUSTOM ANNOTATION AND AN ASPECT FOR TRACKING TIME:
+
+        @Target(ElementType.METHOD)
+        @Retention(RetentionPolicy.RUNTIME)
+        public @interface TrackTime {
+        }
+
+        @Pointcut("@annotation(com.spring100.spring.aop.springaop.aspect.TrackTime)")
+        public void trackTimeAnnotation() {}
+
+
+        @Configuration
+        @Aspect
+        public class MethodExecutionCalculationAspect {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+            @Around("com.spring100.spring.aop.springaop.aspect.CommonJoinPointConfig.trackTimeAnnotation()")
+            public void around(ProceedingJoinPoint joinPoint) throws Throwable {
+                long startTime = System.currentTimeMillis();
+                joinPoint.proceed();
+                long timeTaken = System.currentTimeMillis() - startTime;
+                logger.info("Time taken by {} is {}", joinPoint, timeTaken);
+            }
+        }
+
+
+
