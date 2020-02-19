@@ -897,4 +897,344 @@ public class ComplexBusinessService {
         }
     }
 
+
+
+    UNIT TESTING WITH SPRING FRAMEWORK:
+
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+        <dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+        // Load the context
+        @RunWith(SpringRunner.class)
+        @ContextConfiguration(classes = Spring100BasicApplication.class)
+        public class BinarySearchTest {
+
+
+            // Get this bean from the context. When the context is loaded - the bean can be autowired
+            @Autowired
+            BinarySearchImpl binarySearch;
+
+            @Test
+            public  void testBasicScenario() {
+
+            int actualResult = binarySearch.binarySearch(new int[]{}, 5);
+            assertEquals(3, actualResult);
+                // call method on binarySearch
+                // check if the value is correct
+            }
+        }
+
+
+    XML CONFIGURATION TEST:
+
+        @RunWith(SpringRunner.class)
+        @ContextConfiguration(locations = "/applicationContext.xml")   - for XML-test Config 
+
+
+        <import resource="classpath:applicationContext.xml"/>   - overriding context
+
+
+
+    SPRING UNIT TESTING WITH MOCKITO:
+
+            @RunWith(MockitoJUnitRunner.class)
+            public class SomeCdiBusinessTest {
+
+                //Inject the Mock
+                @InjectMocks
+                SomeCDIBusiness business;
+
+                // Create Mock
+                @Mock
+                SomeCDIDAO daoMock;
+
+                @Test
+                public  void testBasicScenario() {
+                    Mockito.when(daoMock.getData()).thenReturn(new int[] {2 , 4});
+                    //when daoMock.getData() is called, return int[]{2, 4}
+
+                int actualResult = business.findGreates();
+                assertEquals(4, actualResult);
+                }
+                @Test
+                public  void testBasicScenario2() {
+
+                    Mockito.when(daoMock.getData()).thenReturn(new int[] {2, 3});
+
+                    int actualResult = business.findGreates();
+                    assertEquals(3, actualResult);
+                }
+
+                @Test
+                public  void testBasicScenario_NoElements() {
+
+                    Mockito.when(daoMock.getData()).thenReturn(new int[] {});
+
+                    int actualResult = business.findGreates();
+                    assertEquals(Integer.MIN_VALUE, actualResult);
+                }
+            }
+
+
+
+    SPRING BOOT:
+
+        GOALS:
+
+            - Enable building production ready applications quickly
+            - Provide common non-functional features:
+                - embedded servers
+                - metrics
+                - health checks
+                - externalized configuration
+
+            NO:
+                - code generation
+                - not a web/application servers
+
+        FEATURES:
+
+            - Quick Starter Projects with Auto Configuration:
+                - Web
+                - JPA
+            - Embedded Servers:
+                - Tomcat 
+                - Jetty  
+                - Undertow
+            - Production-ready features:
+                - metrics
+                - health checks
+                - externalized configuration
+
+        SIMPLE REST CONTROLLER:
+
+            @RestController
+            public class BooksController {
+
+                @GetMapping("/books")
+                public List<Book> getAllBooks() {
+
+                    return Arrays.asList(new Book(1L, "Masterinf Spring 5.0", "Ranga Karanam"));
+                }
+            }
+
+
+        SPRING BOOT AUTOCONFIGURATION:
+
+            @SpringBootApplication
+            public class BootApplication {
+
+                public static void main(String[] args) {
+                    SpringApplication.run(BootApplication.class, args);
+                }
+            }
+
+            @SpringBootApplication
     
+                - this annotation indicates that this is a Spring Context file.
+                - enables auto configuration
+                - enables component scan
+
+            SpringApplication.run() method - is used to run a Spring Context;
+
+            run() method returns an ApplicationContext
+            
+
+            @SpringBootApplication
+            public class BootApplication {
+
+                public static void main(String[] args) {
+
+                    ApplicationContext applicationContext =
+                            SpringApplication.run(BootApplication.class, args);
+
+                    for (String name : applicationContext.getBeanDefinitionNames()) {
+                        System.out.println(name);
+                    }
+                }
+            }
+
+            - shows all beans from ApplicationContext
+
+            Spring Boot looks at:
+
+            1) Frameworks available on the classpath
+            2) Existing configuration for the application.
+
+            Based on there, Spring Boot provides basic configuration
+            needed to configure the application with these frameworks.
+            This is called Auto Configuration.
+
+            
+            Set up debug logging in application properties:
+
+            logging.level.org.springframework - Debug
+
+
+        SPRING BOOT ACTUATOR:
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+            </dependency>
+
+             - Actuator brings in a lot of monitoring around your application:
+                - what are the beans are configured
+                - how auto configuration has worked
+                - how many times the specific service has called
+                - how many times the specific service has failed
+                
+            HAL BROWSER:
+
+                <dependency>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-rest-hal-browser</artifactId>
+                </dependency>
+
+            BASE URLs:  http://localhost:8080/actuator
+
+                  http://localhost:8080/actuator/health
+
+                  http://localhost:8080/actuator/info
+
+
+
+            For including another we need to configure application properties:
+
+            - management.endpoints.web.exposure.include=*
+
+            http://localhost:8080/browser/index.html#/  - HAL BROWSER
+
+            http://localhost:8080/browser/index.html#http://localhost:8080/actuator/metrics/jvm.memory.used
+
+                - shows JVM memory in use
+
+
+    SPRING BOOT DEVELOPERS TOOLS:
+
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+
+
+
+    SPRING AOP:
+
+        - AOP is a best approach to implement cross-cutting concerns
+
+        @SpringBootApplication
+        public class SpringAopApplication  implements CommandLineRunner {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+            @Autowired
+            private Business1 business1;
+
+            @Autowired
+            private Business2 business2;
+
+            public static void main(String[] args) {
+                ConfigurableApplicationContext applicationContext =
+                        SpringApplication.run(SpringAopApplication.class, args);
+            }
+
+            @Override
+            public void run(String... args) throws Exception {
+                logger.info(business1.calculateSomething());
+                logger.info(business2.calculateSomething());
+            }
+        }
+
+        - The run method os one of the things, which you need to implement, 
+          defined in CommandLineRunner Interface.
+        - As soon as we implement the run method whenever the spring Boot application launches up,
+          it also calls the run() method.
+        - And once the spring context is ready it would call launch up the
+          command line runner and would be seeing the information , which is present in here.
+
+
+
+    DEFINING AN @BEFORE ADVICE:
+
+        execution(* PACKAGE.*.*(..))  
+
+            - I want to intercept all methods irrespective of their return  type in a specific package,
+              any class in a specific package and intercept all method calls irrespective of their 
+              arguments.
+
+        //AOP
+        //Configuration
+        @Configuration
+        @Aspect
+        public class UserAccessAspect {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+            // What kind of method calls I would intercept
+            // execution(* PACKAGE.*.*(..))
+            @Before("execution(* com.spring100.spring.aop.springaop.business.*.*(..))")
+            public void before(JoinPoint joinPoint) {
+                logger.info("Intercepted Method Calls - {}", joinPoint);
+            }
+        }
+
+        @Before annotation intercepts before the call has happened
+
+        - For example it can be used if you want to check if a user has the right 
+          to access and renaming this need to.
+
+        @Configuration
+        @Aspect
+        public class UserAccessAspect {
+
+            private Logger logger = LoggerFactory.getLogger(this.getClass());
+            @Before("execution(* com.spring100.spring.aop.springaop.business.*.*(..))")
+            public void before(JoinPoint joinPoint) {
+                logger.info("Check for user access");
+                logger.info("Allowed execution for- {}", joinPoint);
+            }
+        }
+
+
+
+    ASPECT-ORIENTED TERMINOLOGY: POINTCUT, ADVICE, ASPECT and JOINPOINT:
+
+
+        @Before("execution(* com.spring100.spring.aop.springaop..*.*(..))")
+
+            - intercept all methods in package
+
+
+        POINTCUT -  an expression which defines what kind of method I would
+                    want to intercept
+
+        ADVICE   -    what should I do when I do the interception - this logic called Advice.
+
+
+        ASPECT   -   a combination of Pointcut and Advice
+
+        JOINPOINT   -  is a specific interception of method call,
+                       specific execution instance.
+
+        WEAVING     - the process of implementing the AOP around your method calls
+
+        WEAVER     - the framework  which does the entire logic of making sure thet the Aspect
+                     is invoded the right point.
+
