@@ -1386,5 +1386,180 @@ public class ComplexBusinessService {
             }
         }
 
+    
+    
+    DATABASES, JDBC, JPA:
 
+        LAUNCHING H2 CONSOLE:
+
+            spring.h2.console.enabled=true
+                - in application properties - enables H2 console
+
+                - now console available at http://localhost:8080/h2-console 
+
+                - create schema.sql file in resources:
+
+                create table person
+                (
+                    id integer not null,
+                    name varchar(255) not null,
+                    location varchar(255),
+                    birth_day timestamp,
+                    primary key(id)
+                );
+
+                - create data.sql in resources:
+
+                INSERT INTO person (id, name, location, birth_date)
+                VALUES(10001, 'Ranga', 'Hyderabad',sysdate());
+                INSERT INTO person (id, name, location, birth_date)
+                VALUES(10002, 'James', 'New York',sysdate());
+                INSERT INTO person (id, name, location, birth_date)
+                VALUES(10003, 'Pieter', 'Amsterdam',sysdate());
+
+
+        SPRING JDBC TEMPLATE:
+
+            In Spring Jdbc there is a mapper. There is an automatic mapper
+            which can be used, when colum names match
+
+
+            @Repository
+            public class PersonJdbcDao {
+
+                @Autowired
+                JdbcTemplate jdbcTemplate;
+                
+                public List<Person> findAll() {
+                return jdbcTemplate.query("select * from person", 
+                        new BeanPropertyRowMapper<>(Person.class));
+                }
+            }
+
+            - Whenever we use a BeanPropertyTowMapper, the Bean on which 
+              the PropertyRowMapper is defined  should have  a no argument constructor
+
+            @SpringBootApplication
+            public class DatabaseDemoApplication implements CommandLineRunner {
+
+                private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+                @Autowired
+                PersonJdbcDao dao;
+
+                public static void main(String[] args) {
+                    SpringApplication.run(DatabaseDemoApplication.class, args);
+                }
+
+                @Override
+                public void run(String... args) throws Exception {
+
+                    logger.info("All users -> {}", dao.findAll());
+                }
+            }
+
+        
+DAO CLASS:
+
+            @Repository
+            public class PersonJdbcDao {
+
+                @Autowired
+                JdbcTemplate jdbcTemplate;
+
+                public List<Person> findAll() {
+                return jdbcTemplate.query("select * from person",
+                        new BeanPropertyRowMapper<>(Person.class));
+                }
+
+                public Person findById(int id) {
+                    return jdbcTemplate.queryForObject("select * from person where id=?", new Object[]{id},
+                            new BeanPropertyRowMapper<>(Person.class));
+                }
+
+
+                public int  deleteById(int id) {
+                    return jdbcTemplate.update("delete from person where id=?", new Object[]{id});
+                    //return jdbcTemplate.update("delete from person where id=?, xyz=?", new Object[]{id, xyz});
+                    // - for multiple
+                }  //return value is - how many rows deleted
+
+                public int insert(Person person) {
+                    return jdbcTemplate.update("insert into person (id, name, location, birth_date) "
+                            + "values(?,?,?,?)", person.getId(),
+                            person.getName(),
+                            person.getLocation(),
+                            new Timestamp(person.getBirthDate().getTime()));
+                }
+                public int update(Person person) {
+                    return jdbcTemplate.update("update person "
+                                    + "set name = ?, location = ?, birth_date = ? "
+                                    + "where id = ?",
+                            new Object[] {
+                                    person.getName(),
+                                    person.getLocation(),
+                                    new Timestamp(person.getBirthDate().getTime()),
+                                    person.getId(),
+                            });
+                }
+            }
+
+
+BOOT MAIN:
+
+                @SpringBootApplication
+                public class DatabaseDemoApplication implements CommandLineRunner {
+
+                    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+                    @Autowired
+                    PersonJdbcDao dao;
+
+                    public static void main(String[] args) {
+                        SpringApplication.run(DatabaseDemoApplication.class, args);
+                    }
+
+                    @Override
+                    public void run(String... args) throws Exception {
+
+                        logger.info("All users -> {}", dao.findAll());
+                        logger.info("User id 10001 -> {}", dao.findById(10001));
+                        logger.info("Deleting 10002 ->  Rows deleted {}", dao.deleteById(10002));
+                        logger.info("Inserting in 10004 -> {}",
+                                dao.insert(new Person(10004, "Tara", "Berlin", new Date())));
+                        logger.info("Update in 10003 -> {}",
+                                dao.update(new Person(10003, "Pieter", "Moscow", new Date())));
+                    }
+                }
+
+        - So, the complexities in writing the query. 
+        - Once you have the query ready, then - all that you need to do is pass in the appropriate 
+          parameters and that's all.
+
+
+
+    CREATING A CUSTOM SPRING JDBC ROW-MAPPER: 
+
+        BeanPropertyRowMapper<Person>(Person.class);
+
+            - for mapping results of the query  to the bean
+
+
+
+            class PersonRowMapper implements RowMapper<Person> {
+                @Override
+                public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    Person person = new Person();
+                    person.setId(rs.getInt("id"));
+                    person.setName(rs.getString("name"));
+                    person.setLocation(rs.getString("location"));
+                    person.setBirthDate(rs.getTimestamp("birth_date"));
+                    return person;
+                }
+            }
+
+            public List<Person> findAll() {
+            return jdbcTemplate.query("select * from person",
+                    new PersonRowMapper());
+            }
 
