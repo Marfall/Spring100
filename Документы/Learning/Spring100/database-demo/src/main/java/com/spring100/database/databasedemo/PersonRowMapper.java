@@ -1,0 +1,21 @@
+package com.spring100.database.databasedemo;
+
+import com.spring100.database.databasedemo.entity.Person;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@Component
+class PersonRowMapper implements RowMapper<Person> {
+    @Override
+    public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Person person = new Person();
+        person.setId(rs.getInt("id"));
+        person.setName(rs.getString("name"));
+        person.setLocation(rs.getString("location"));
+        person.setBirthDate(rs.getTimestamp("birth_date"));
+        return person;
+    }
+}
