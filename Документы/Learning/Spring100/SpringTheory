@@ -1771,3 +1771,141 @@ BOOT MAIN:
                 create database person_example;
                 create user 'personuser'@'localhost' identified by 'YOUR_PASSWORD';
                 grant all on person_example.* to 'personuser'@'localhost';
+
+
+
+    WEB APPLICATIONS:
+
+
+        POM.XML FOR SERVLET WEB WITHOUT SPRING:
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <project xmlns="http://maven.apache.org/POM/4.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                <modelVersion>4.0.0</modelVersion>
+
+                <groupId>org.example</groupId>
+                <artifactId>javaweb</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <packaging>war</packaging>
+
+                <dependencies>
+            <!--        <dependency>-->
+            <!--            <groupId>javax</groupId>-->
+            <!--            <artifactId>javaee-web-api</artifactId>-->
+            <!--            <version>6.0</version>-->
+            <!--            <scope>provided</scope>-->
+            <!--        </dependency>-->
+                </dependencies>
+
+                <build>
+                    <pluginManagement>
+                        <plugins>
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-compiler-plugin</artifactId>
+                                <version>3.8.1</version>
+                                <configuration>
+                                    <verbose>true</verbose>
+                                    <source>11</source>
+                                    <target>11</target>
+                                    <showWarnings>true</showWarnings>
+                                </configuration>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.apache.tomcat.maven</groupId>
+                                <artifactId>tomcat9-maven-plugin</artifactId>
+                                <version>2.2</version>
+                                <configuration>
+                                    <path>/</path>
+                                    <contextReloadable>true</contextReloadable>
+                                </configuration>
+                            </plugin>
+                        </plugins>
+                    </pluginManagement>
+                </build>
+            </project>
+
+
+        WEB.XML:
+
+            <!-- webapp/WEB-INF/web.xml -->
+            <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+                    version="3.0">
+
+                <display-name>To do List</display-name>
+
+                <welcome-file-list>
+                    <welcome-file>login.do</welcome-file>
+                </welcome-file-list>
+
+            </web-app>
+
+
+        SIMPLE SERVLET:
+
+
+            @WebServlet(urlPatterns = "/login.do")
+            public class LoginServlet extends HttpServlet {
+
+                @Override
+                protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+                    PrintWriter out = response.getWriter();
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Yahoo!!!!!!!!</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("My First Servlet");
+                    out.println("</body>");
+                    out.println("</html>");
+
+                }
+
+            }
+
+        tomcat9-maven-plugin   - automatically downloads and running web-application
+                                 in Tomcat.
+
+        maven-compiler-plugin   - compiling classes, and also building Jars and Wars.
+                                  default  compiler Java-version is 5.
+
+        Servlet - simply Java class, which can take a request in and can respond back with a response.
+
+        - Any servlet should extend HttpServlet
+
+        - @WebServlet(urlPatterns = "/login.do")
+
+        -doGet()  method is handling GET-requests
+
+
+        JSP:
+
+            <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+            <html>
+                <head>
+                    <title>Yeah!!! From JSP!!!</title>
+                </head>
+                <body>
+                    JSP READY!!!
+                </body>
+            </html>
+
+        SERVLET WITH REDIRECT TO JSP PAGE:
+
+            @WebServlet(urlPatterns = "/login.do")
+            public class LoginServlet extends HttpServlet {
+                @Override
+                protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request,response);
+                }
+            }
+
+
+        
+
+
+
+
