@@ -1903,8 +1903,239 @@ BOOT MAIN:
                 }
             }
 
+        SCRIPTLET IN JSP:
+
+            <%  System.out,println(""scriptlet) %>
+
+        SIMPLY LOGIN FORM:
+
+            <form action="/login.do" method="post">
+                Enter your name <input type="text" name="name" />
+                <input type="submit" value="Login"/>
+            </form>
+
+
+        RUNNING TOMCAT FROM  MAVEN_PLUGIN:   
+
+           -  mvn  tomcat7:run
+
+        ADDING SPRING MVC TO PROJECT:
+
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>4.2.2.RELEASE</version>
+            </dependency>
+
+        - Servlets are usually added in web.xml or Annotation @Controller us used
+
+        - @ResponseBody
+            -   makes Spring MVC dispatcher servlet think that whatever response is returns back,
+                it is not the name of the View, not an URL.
+
+
+        WEB.XML:
+
+            <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+            version="3.0">
+
+            <display-name>To do List</display-name>
+
+            <welcome-file-list>
+                <welcome-file>login.do</welcome-file>
+            </welcome-file-list>
+
+            <servlet>
+                <servlet-name>dispatcher</servlet-name>
+                <servlet-class>
+                    org.springframework.web.servlet.DispatcherServlet
+                </servlet-class>
+                <init-param>
+                    <param-name>contextConfigLocation</param-name>
+                    <param-value>/WEB-INF/todo-servlet.xml</param-value>
+                </init-param>
+                <load-on-startup>1</load-on-startup>
+            </servlet>
+            <servlet-mapping>
+                <servlet-name>dispatcher</servlet-name>
+                <url-pattern>/spring-mvc/*</url-pattern>
+            </servlet-mapping>
+        </web-app>    
+
+
+    CONTROLLER:
+
+        @Controller
+        public class LoginController {
+            @RequestMapping(value = "/login")
+            @ResponseBody
+            public String sayHello() {
+                return "Hello!";
+            }
+        }
+
+
+    DISPATCHER SERVLET CONFIG:
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <beans xmlns="http://www.springframework.org/schema/beans"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:context="http://www.springframework.org/schema/context"
+            xmlns:mvc="http://www.springframework.org/schema/mvc"
+            xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+                <context:component-scan base-package="spring"/>
+
+                <mvc:annotation-driven/>
+        </beans>
+
+
+
+    VIEW RESOLVER:
+
+        <bean
+                class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                <property name="prefix">
+                        <value>/WEB-INF/views/</value>
+                </property>
+                <property name="suffix">
+                        <value>.jsp</value>
+                </property>
+        </bean>
+
+    
+    SPRING MVC ARCHITECTURE:
+
+        - Anything starting with Spring MVC would come to this FrontController (DispatcherServlet), that configured.
+          Front controllert would look at the subsequent part of url and it will see if there is any controller, which
+          is annotated.
+        - If it woild find a controller method, this method would be executed , and then controller can return back which
+          view has to be rendered.
+        - Controller would tell FrontController which view to show.
+        - FrontController would make use of ViewResolver and then FrontController  would execute the view tepmplate and 
+          return the response back.
+
+
+
+    ADD LOG4J IN SPRING MVC:
+
+          <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        - For using log4j, we need to add log4j.properties file in resources:
+
+           log4j.rootLogger=TRACE, Appender1, 
+
+            log4j.appender.Appender1=org.apache.log4j.ConsoleAppender
+            log4j.appender.Appender1.layout=org.apache.log4j.PatternLayout
+            log4j.appender.Appender1.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+
+            #TRACE
+            #DEBUG
+            #INFO
+            #WARN
+            #ERROR
+
+
+            CONTROLLER WITH @REQUESTPARAM AND MODEL MAP, ERROR MESSAGE:
+
+                @Controller
+                public class LoginController {
+
+                    @Autowired
+                    LoginService service;
+
+                    @RequestMapping(value = "/login", method = RequestMethod.GET)
+                    public String showLoginPage() {
+
+                        return "login";
+                    }
+                    @RequestMapping(value = "/login", method = RequestMethod.POST)
+                    public String handleLoginRequest(@RequestParam String name,@RequestParam String password, ModelMap model) {
+                        if (!service.validateUser(name, password)) {
+                            model.put("errorMessage", "Invalid Credentials");
+                            return "login";
+                        }
+                        model.put("name", name);
+                        model.put("password", password);
+                        return "welcome";
+                    }
+                }
+
+            LOGIN SERVICE:
+
+                @Service
+                public class LoginService {
+                    public boolean validateUser(String user, String password) {
+                        return user.equalsIgnoreCase("in28Minutes") && password.equals("dummy");
+                    }
+                }
+
+
+
+    MAVEN:
+
+        POM - Project Object Model
+            - is where you define all the configuration for maven-project
+        
+        artifactId - name, that we are giving to this speific project
+
+        groupId    - company name
+
+        version - 0.0.1-SNAPSHOT means that version under development.
+
+        packaging - indicates how you would want to package the output of this specific project
+                    - jar, war, ear (can contain multiple wars)
+
+
+        name 
+
+        description
+
+        parent  -  pom-file can inherit from a parent 
+
+        properties  -   
+                        <java.version>1.8</java.version>
+
+        dependencies  -  load jar dependencies from repository
+
+
+        MAVEN BUILD LIFECYCLE:
+
+            - validate
+            - compile
+            - test
+            - package
+            - Integration test
+            - verify
+            - Install - taking artifact and putting to a local repository
+            - deploy   - to remote repository
+
+        - mvn clean install    - execute all the steps in lifecycle up to install.
 
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
