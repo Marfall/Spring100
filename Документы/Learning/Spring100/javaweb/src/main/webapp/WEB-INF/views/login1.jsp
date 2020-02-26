@@ -11,7 +11,7 @@
     <title>Yeah!!! From JSP!!!</title>
 </head>
 <body>
-    JSP READY!!!
+    TEST!!
     ${name}
 </body>
 </html>
